@@ -1,13 +1,16 @@
 ﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-Shader "Custom/PhongShader"
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "CM163/PhongShader"
 {
 	Properties{
-		 _Color("Color", Color) = (1, 1, 1, 1) //The color of our object
-		 _Tex("Pattern", 2D) = "white" {} //Optional texture
+		_Color("Color", Color) = (1, 1, 1, 1) //The color of our object
 
-		 _Shininess("Shininess", Float) = 10 //Shininess
-		 _SpecColor("Specular Color", Color) = (1, 1, 1, 1) //Specular highlights color
+		_Shininess("Shininess", Float) = 10 //Shininess
+		_SpecColor("Specular Color", Color) = (1, 1, 1, 1) //Specular highlights color
 	}
 		SubShader{
 			Tags { "RenderType" = "Opaque" } //We're not rendering any transparent objects
@@ -24,9 +27,6 @@ Shader "Custom/PhongShader"
 
 					uniform float4 _LightColor0; //From UnityCG
 
-					sampler2D _Tex; //Used for texture
-					float4 _Tex_ST; //For tiling
-
 					uniform float4 _Color; //Use the above variables in here
 					uniform float4 _SpecColor;
 					uniform float _Shininess;
@@ -35,14 +35,12 @@ Shader "Custom/PhongShader"
 					{
 						float4 vertex : POSITION;
 						float3 normal : NORMAL;
-						float2 uv : TEXCOORD0;
 					};
 
 					struct v2f
 					{
 						float4 pos : POSITION;
 						float3 normal : NORMAL;
-						float2 uv : TEXCOORD0;
 						float4 posWorld : TEXCOORD1;
 					};
 
@@ -53,7 +51,6 @@ Shader "Custom/PhongShader"
 						o.posWorld = mul(unity_ObjectToWorld, v.vertex); //Calculate the world position for our point
 						o.normal = normalize(mul(float4(v.normal, 0.0), unity_WorldToObject).xyz); //Calculate the normal
 						o.pos = UnityObjectToClipPos(v.vertex); //And the position
-						o.uv = TRANSFORM_TEX(v.uv, _Tex);
 
 						return o;
 					}
@@ -81,7 +78,7 @@ Shader "Custom/PhongShader"
 							specularReflection = attenuation * _LightColor0.rgb * _SpecColor.rgb * pow(max(0.0, dot(reflect(-lightDirection, normalDirection), viewDirection)), _Shininess);
 						}
 
-						float3 color = (ambientLighting + diffuseReflection) * tex2D(_Tex, i.uv) + specularReflection; //Texture is not applient on specularReflection
+						float3 color = (ambientLighting + diffuseReflection) + specularReflection; //Texture is not applient on specularReflection
 						return float4(color, 1.0);
 					}
 				ENDCG
@@ -98,9 +95,6 @@ Shader "Custom/PhongShader"
 
 			  uniform float4 _LightColor0; //From UnityCG
 
-			  sampler2D _Tex; //Used for texture
-			  float4 _Tex_ST; //For tiling
-
 			  uniform float4 _Color; //Use the above variables in here
 			  uniform float4 _SpecColor;
 			  uniform float _Shininess;
@@ -116,7 +110,6 @@ Shader "Custom/PhongShader"
 			  {
 				  float4 pos : POSITION;
 				  float3 normal : NORMAL;
-				  float2 uv : TEXCOORD0;
 				  float4 posWorld : TEXCOORD1;
 			  };
 
@@ -127,7 +120,6 @@ Shader "Custom/PhongShader"
 				  o.posWorld = mul(unity_ObjectToWorld, v.vertex); //Calculate the world position for our point
 				  o.normal = normalize(mul(float4(v.normal, 0.0), unity_WorldToObject).xyz); //Calculate the normal
 				  o.pos = UnityObjectToClipPos(v.vertex); //And the position
-				  o.uv = TRANSFORM_TEX(v.uv, _Tex);
 
 				  return o;
 			  }
@@ -154,10 +146,10 @@ Shader "Custom/PhongShader"
 					  specularReflection = attenuation * _LightColor0.rgb * _SpecColor.rgb * pow(max(0.0, dot(reflect(-lightDirection, normalDirection), viewDirection)), _Shininess);
 				  }
 
-				  float3 color = (diffuseReflection)* tex2D(_Tex, i.uv) + specularReflection; //No ambient component this time
+				  float3 color = (diffuseReflection) + specularReflection; //No ambient component this time
 				  return float4(color, 1.0);
 			  }
 		  ENDCG
 			}
-		 }
+		}
 }
