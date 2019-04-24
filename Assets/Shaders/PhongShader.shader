@@ -4,7 +4,7 @@
 
 // Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-Shader "CM163/PhongShader"
+Shader "CMPM163/PhongShader"
 {
 	Properties{
 		_Color("Color", Color) = (1, 1, 1, 1) //The color of our object

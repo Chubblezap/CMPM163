@@ -1,4 +1,4 @@
-﻿Shader "CM163/Texture"
+﻿Shader "CMPM163/Texture"
 {
     Properties
     {
