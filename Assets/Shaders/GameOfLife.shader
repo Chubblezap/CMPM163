@@ -73,41 +73,66 @@
 				arr[7] = tex2D(_MainTex, float2(left , up));   //NW
 
 				int cnt = 0;
-				for (int i = 0; i < 8; i++) {
-					if (arr[i].r > 0.5) {
+				for (int i = 0; i < 8; i++)
+				{
+					if (arr[i].r == 1.0) 
+					{
 						cnt++;
 					}
 				}
 
-				if (C.r >= 0.5) { //cell is alive
-					if (cnt == 2 || cnt == 3 || cnt == 4) {
-						//Any live cell with two or three OR FOUR live neighbours lives on to the next generation.
+				if (C.r == 1.0 && C.g == 0.0 && C.b == 0.0) //cell is red
+				{
+					if (cnt == 2 || cnt == 3)
+					{
+						//Any red cell with two or three red neighbours lives on to the next generation.
 
-						return float4(1.0,1.0,1.0,1.0);
+						return float4(1.0, 0.0, 0.0, 1.0);
 					}
- else {
-						//Any live cell with fewer than two live neighbours dies, as if caused by underpopulation.
-						//Any live cell with more than four live neighbours dies, as if by overpopulation.
+					else 
+					{
+						//Any red cell without two or four red neighbors becomes green
 
-						return float4(0.0,0.0,0.0,1.0);
+						return float4(0.0, 1.0, 0.0, 1.0);
 					}
 				}
- else { //cell is dead
-  if (cnt == 3) {
-	  //Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+				else if (C.r == 0.0 && C.g == 1.0 && C.b == 0.0) //cell is green
+				{
+					if (cnt == 1)
+					{
+						//Any green cell with a red cell next to it lives on to the next generation.
 
-	  return float4(1.0,1.0,1.0,1.0);
-  }
-else {
- return float4(0.0,0.0,0.0,1.0);
+						return float4(0.0, 1.0, 0.0, 1.0);
+					}
+					else
+					{
+						//Any green cell with more than 1 red neighbor, or no red neighbors becomes blue.
+						return float4(0.0, 0.0, 1.0, 1.0);
+					}
+				}
+				else if (C.r == 0.0 && C.g == 0.0 && C.b == 1.0) //cell is blue
+				{
+					if (cnt == 2)
+					{
+						//Any dead cell with two red neighbours becomes a live cell, as if by reproduction.
 
-}
-}
+						return float4(1.0, 0.0, 0.0, 1.0);
+					}
+					else
+					{
+						return float4(0.0, 0.0, 1.0, 1.0);
 
-}
+					}
+				}
+				else
+				{
+					return float4(0.0, 0.0, 1.0, 1.0);
+				}
 
-ENDCG
-}
+			}
+
+		ENDCG
+		}
 
 	}
 		FallBack "Diffuse"

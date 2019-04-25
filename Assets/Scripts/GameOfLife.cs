@@ -33,15 +33,24 @@ public class GameOfLife : MonoBehaviour
         texB.filterMode = FilterMode.Point;
 
         for (int i = 0; i < height; i++)
+        {
             for (int j = 0; j < width; j++)
-                if (Random.Range(0.0f, 1.0f) < 0.5)
+            {
+                float rnd = Random.Range(0.0f, 1.0f);
+                if (rnd <= 0.3)
                 {
-                    texA.SetPixel(i, j, Color.black);
+                    texA.SetPixel(i, j, Color.red);
+                }
+                else if (rnd > 0.3 && rnd <= 0.7)
+                {
+                    texA.SetPixel(i, j, Color.green);
                 }
                 else
                 {
-                    texA.SetPixel(i, j, Color.white);
+                    texA.SetPixel(i, j, Color.blue);
                 }
+            }
+        }
 
         texA.Apply(); //copy changes to the GPU
 
@@ -63,7 +72,7 @@ public class GameOfLife : MonoBehaviour
         //of the Cellular Automata system
         rend.material.shader = cellularAutomataShader;
 
-        if (count % 2 == 0)
+        if (count % 5 == 0)
         {
             inputTex = texA;
             outputTex = texB;
