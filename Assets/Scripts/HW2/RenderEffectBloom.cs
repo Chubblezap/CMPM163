@@ -40,13 +40,6 @@ public class RenderEffectBloom : MonoBehaviour
         bloomMax = currBloom + 5;
         up = true;
 
-        if (!SystemInfo.supportsImageEffects)
-        {
-            enabled = false;
-            Debug.Log("garbage");
-            return;
-        }
-
         if (!BloomShader && !BloomShader.isSupported)
         {
             enabled = false;

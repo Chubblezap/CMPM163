@@ -4394,7 +4394,7 @@ ParticleSystem:
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
   CustomDataModule:
-    enabled: 1
+    enabled: 0
     mode0: 0
     vectorComponentCount0: 1
     color0:
